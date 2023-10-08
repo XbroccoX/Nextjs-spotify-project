@@ -8,7 +8,7 @@ const refreshAccessToken = async (token) => {
     spotifyApi.setRefreshToken(token.refreshToken);
 
     const { body: refreshToken } = await spotifyApi.refreshAccessToken();
-    console.log("TOKEN ENTRO A LA FUNCION Y FUE REFRESCADO", refreshToken);
+    console.log("TOKEN ENTRO A LA FUNCION Y FUE REFRESCADO");
 
     return {
       ...token,
@@ -17,7 +17,7 @@ const refreshAccessToken = async (token) => {
       refreshToken: refreshToken.refresh_token ?? token.refreshToken, // reemplazar si vuelve el nuevo, si no, volver al antiguo token de actualización
     };
   } catch (error) {
-    console.error(error);
+    console.error("error", error);
     return {
       ...token,
       error: "RefreshAccessTokenError",

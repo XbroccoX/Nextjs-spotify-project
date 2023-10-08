@@ -3,6 +3,7 @@ import { getProviders, signIn } from "next-auth/react";
 import AndesLogo from "../public/images/andeslogo.png";
 
 const Login = ({ providers }) => {
+  console.log(providers, "login pagina Providers");
   return (
     <div className="h-screen sm:grid sm:grid-cols-2">
       <div className="flex justify-around align-center p-20">
