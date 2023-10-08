@@ -54,9 +54,9 @@ const Sidebar = () => {
 
       <aside
         ref={sidebarRef}
-        className={`text-[#b3b3b3] text-sm  border-gray-900 px-3 py-2 space-y-2 fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${
+        className={`text-[#b3b3b3] text-sm sm:pr-0 border-gray-900 px-3 py-2 space-y-2 fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0`}
+        } sm:translate-x-0 overflow-y-scroll h-screen scrollbar-hide`}
         aria-label="Sidebar"
       >
         <div
@@ -94,6 +94,15 @@ const Sidebar = () => {
           </button>
           {/* Playlist */}
           <div className="space-y-2 px-3 py-1">
+            <p className="cursor-pointer hover:text-white">playlistName</p>
+            <p className="cursor-pointer hover:text-white">playlistName</p>
+            <p className="cursor-pointer hover:text-white">playlistName</p>
+            <p className="cursor-pointer hover:text-white">playlistName</p>
+            <p className="cursor-pointer hover:text-white">playlistName</p>
+            <p className="cursor-pointer hover:text-white">playlistName</p>
+            <p className="cursor-pointer hover:text-white">playlistName</p>
+            <p className="cursor-pointer hover:text-white">playlistName</p>
+            <p className="cursor-pointer hover:text-white">playlistName</p>
             <p className="cursor-pointer hover:text-white">playlistName</p>
             <p className="cursor-pointer hover:text-white">playlistName</p>
             <p className="cursor-pointer hover:text-white">playlistName</p>

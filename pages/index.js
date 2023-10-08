@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
+import Center from "../components/Center";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
         {/* Sidebar */}
         <Sidebar />
         {/* Center */}
+        <Center />
       </main>
       <div>{/* Barra de reproduccion */}</div>
     </div>
