@@ -1,34 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Aplicación para Spotify
 
-## Getting Started
+Desarrolla una aplicación que permita consumir los servicios de la API de Spotify para obtener información sobre canciones, artistas y álbumes. La aplicación debe cumplir con los siguientes requisitos:
 
-First, run the development server:
+## 1. Página de inicio:
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- Mostrar un formulario de búsqueda donde el usuario pueda ingresar el nombre de una canción, artista o álbum.
+- Al enviar el formulario, la aplicación debe consumir el servicio de búsqueda de Spotify y mostrar los resultados obtenidos en una lista.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 2. Detalle de canción, artista o álbum:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- Al hacer clic en un resultado de la búsqueda, la aplicación debe mostrar una página de detalle con la información completa de la canción, artista o álbum seleccionado.
+- La página de detalle debe mostrar al menos la imagen, el nombre y otros detalles relevantes de la canción, artista o álbum.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## 3. Reproducción de canciones:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- En la página de detalle de una canción, la aplicación debe permitir reproducir un fragmento de la canción utilizando el reproductor de audio de Spotify.
+- El reproductor de audio debe tener controles básicos como reproducción, pausa y volumen.
 
-## Learn More
+## 4. Autenticación de usuario:
 
-To learn more about Next.js, take a look at the following resources:
+- Implementa un sistema de autenticación utilizando el servicio de autenticación de Spotify.
+- La aplicación debe permitir que el usuario inicie sesión con su cuenta de Spotify y obtener un token de acceso para consumir los servicios de la API.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 5. Otros requisitos adicionales (opcional):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Implementa una funcionalidad para guardar canciones, artistas o álbumes favoritos del usuario.
+- Agrega paginación a la lista de resultados de búsqueda para mostrar más de 20 resultados.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+**Nota:** Recuerda utilizar buenas prácticas de desarrollo en, como componentes reutilizables, servicios, enrutamiento y manejo de errores. Tu código debe ser limpio, legible y bien estructurado.
