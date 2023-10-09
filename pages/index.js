@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
 import Center from "../components/Center";
+import { getSession } from "next-auth/react";
 
 export default function Home() {
   return (
@@ -21,3 +22,13 @@ export default function Home() {
     </div>
   );
 }
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+export const getServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+
+  return {
+    props: { session },
+  };
+};
