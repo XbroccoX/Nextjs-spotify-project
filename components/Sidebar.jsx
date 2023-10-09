@@ -80,10 +80,6 @@ const Sidebar = () => {
             <HomeIcon className="h-5 w-5  " />
             <p className="">Home</p>
           </button>
-          <button className="flex items-center space-x-5 hover:text-white px-3 py-1">
-            <MagnifyingGlassIcon className="h-5 w-5 " />
-            <p className="">Search</p>
-          </button>
         </div>
 
         <div className="flex flex-col gap-4 bg-[#121212] px-3 py-2 rounded-xl">

@@ -96,7 +96,7 @@ const Player = () => {
       {/* Center */}
       <div className="flex items-center justify-evenly">
         {/* <ArrowsRightLeftIcon className="button" /> */}
-        <BackwardIcon className="button" />
+        {/* <BackwardIcon className="button" /> */}
         {isPlaying ? (
           <PauseCircleIcon
             onClick={handlePlayPause}
@@ -108,7 +108,7 @@ const Player = () => {
             className="button w-10 h-10"
           />
         )}
-        <ForwardIcon className="button" />
+        {/* <ForwardIcon className="button" /> */}
         {/* <ArrowPathRoundedSquareIcon className="button" /> */}
       </div>
       {/* Right */}
