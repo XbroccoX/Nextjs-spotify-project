@@ -77,10 +77,7 @@ const Center = () => {
           <p className=" hidden sm:block text-sm">{playlist?.description}</p>
         </div>
         <div className="flex flex-col lg:flex-row space-y-2 lg:space-x-3 lg:space-y-0">
-          <button className="bg-white text-black rounded-full px-2 py-1 md:px-4 md:py-2 font-bold">
-            REPRODUCIR
-          </button>
-          <button className="bg-gray-700 text-white rounded-full px-2 py-1 md:px-4 md:py-2 font-bold">
+          <button className="bg-gray-700 text-white rounded-full px-2 py-1 md:px-4 md:py-2 font-bold cursor-default">
             SIGUIENDO
           </button>
           {/* <button className="bg-gray-700 text-white rounded-full px-4 py-2 font-bold">

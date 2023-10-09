@@ -14,12 +14,12 @@ const Song = ({ order, track }) => {
   const playSong = () => {
     setCurrentTrackId(track.track.id);
     setIsPlaying(true);
-    // spotifyApi.play({ uris: [`spotify:track:${track.track.id}`] });
+    spotifyApi.play({ uris: [track.track.uri] });
   };
 
   return (
     <div
-      onClick={playSong()}
+      onClick={playSong}
       className="grid grid-cols-2 py-1 px-5 text-gray-500 cursor-pointer hover:bg-gray-600 hover:text-white"
     >
       <div className="flex items-center space-x-4">
