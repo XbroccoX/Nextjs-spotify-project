@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
 import { useRecoilState } from "recoil";
 import {
   HomeIcon,
@@ -9,19 +8,16 @@ import {
   HeartIcon,
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
-import useSpotify from "../hooks/useSpotify";
 import { isFavoriteState, playlistIdState } from "../atoms/playlistAtom";
 import { isSearchingState } from "../atoms/searchAtom";
+import { useGroupPlaylist } from "../hooks/useGroupPlaylist";
 
 const Sidebar = () => {
-  const { data: session, status } = useSession();
-  const spotifyApi = useSpotify();
-
+  const { playlist, setPlaylist, spotifyApi, session } = useGroupPlaylist();
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
   const [isSearching, setIsSearching] = useRecoilState(isSearchingState);
   const [isFavorite, setIsFavorite] = useRecoilState(isFavoriteState);
 
-  const [playlist, setPlaylist] = useState([]);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
 
@@ -34,15 +30,6 @@ const Sidebar = () => {
     setIsFavorite(!isFavorite);
     setIsSearching(null);
   };
-
-  useEffect(() => {
-    console.log("RENDER ASIDE LIST");
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi.getUserPlaylists().then((res) => {
-        setPlaylist(res.body.items);
-      });
-    }
-  }, [session, spotifyApi]);
 
   useEffect(() => {
     function handleDocumentClick(event) {
@@ -58,6 +45,7 @@ const Sidebar = () => {
 
   return (
     <>
+      {/* BURGER IN MOBILE */}
       <button
         onClick={() => setSidebarOpen(!isSidebarOpen)}
         data-drawer-target="default-sidebar"
@@ -83,9 +71,9 @@ const Sidebar = () => {
 
       <aside
         ref={sidebarRef}
-        className={`z-0 text-[#b3b3b3] text-sm sm:pr-0 border-gray-900 px-2 py-2 space-y-2 fixed top-0 left-0 w-64 h-screen transition-transform ${
+        className={`z-10 text-[#b3b3b3] text-sm sm:pr-0 border-gray-900 px-2 py-2 space-y-2 fixed top-0 left-0 w-64 h-[90%] transition-transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0 overflow-y-scroll h-screen scrollbar-hide`}
+        } sm:translate-x-0 overflow-y-scroll scrollbar-hide`}
         aria-label="Sidebar"
       >
         <div

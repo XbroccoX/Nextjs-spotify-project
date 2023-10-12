@@ -78,7 +78,7 @@ const Player = () => {
   );
 
   return (
-    <div className="h-20  rounded-lg text-white grid grid-cols-3 text-xs md:text-base px-2 md:px-8">
+    <div className="h-20 z-40 rounded-lg text-white grid grid-cols-3 text-xs md:text-base px-2 md:px-8">
       {/* left */}
       <div className="flex items-center space-x-4">
         <Image

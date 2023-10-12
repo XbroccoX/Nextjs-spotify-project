@@ -1,7 +1,6 @@
 import { useRecoilValue } from "recoil";
 import Song from "./Song";
 import { searchTrackState } from "../atoms/searchAtom";
-import RelevantSong from "./RelevantSong";
 import PrincipalSearch from "./PrincipalSearch";
 
 const TracksSearch = () => {

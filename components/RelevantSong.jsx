@@ -24,12 +24,12 @@ const RelevantSong = ({ trackInfo }) => {
       <div
         key={trackInfo.id}
         onClick={playSong}
-        className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl md:w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+        className="flex items-center w-full bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl md:w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
       >
         <Image
           width={120}
           height={120}
-          className="object-cover w-1/2 h-auto md:w-2/6 rounded-t-lg md:h-auto  md:rounded-none md:rounded-l-lg"
+          className="object-cover max-h-[150px] w-1/2 max-w-[150px] h-auto md:w-2/6 rounded-t-lg md:h-auto  md:rounded-none md:rounded-l-lg"
           src={trackInfo?.album?.images[0]?.url}
           alt={trackInfo?.name}
         />

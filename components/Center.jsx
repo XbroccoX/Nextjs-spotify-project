@@ -6,8 +6,6 @@ import useSpotify from "../hooks/useSpotify";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { set, shuffle } from "lodash";
 
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-
 import {
   isFavoriteState,
   playlistIdState,
@@ -18,6 +16,8 @@ import Songs from "./Songs";
 import Spinner from "./UI/Spinner";
 import TracksSearch from "./TracksSearch";
 import AndesLogo from "../public/images/andeslogo.png";
+import HeaderUser from "./main/HeaderUser";
+import SearchBar from "./main/SearchBar";
 
 const color = [
   "from-indigo-500",
@@ -39,22 +39,23 @@ const Center = () => {
 
   const [bgColor, setBgColor] = useState(null);
 
+  //TRAER PLAYLIST ESPECIFICA
   useEffect(() => {
+    if (!playlistId) return;
+    setIsLoading(true);
     spotifyApi
       .getPlaylist(playlistId)
       .then((res) => {
-        console.log("playlist normal", res.body);
+        setIsLoading(false);
         setPlaylist(res.body);
       })
       .catch((err) => {
+        setIsLoading(false);
         console.log("Hay un error al momento de traer la playlist", err);
       });
   }, [spotifyApi, playlistId]);
 
-  useEffect(() => {
-    setBgColor(shuffle(color).pop());
-  }, [playlistId]);
-
+  // TRAER FAVORITOS
   useEffect(() => {
     console.log("se ejecuta");
     spotifyApi
@@ -71,6 +72,11 @@ const Center = () => {
         }
       );
   }, [isFavorite, spotifyApi]);
+
+  //CAMBIO DE COLORES
+  useEffect(() => {
+    setBgColor(shuffle(color).pop());
+  }, [playlistId]);
 
   //  METHODS HANDLERS AND FUNCTIONS
   const handleOnChangeInput = (e) => {
@@ -104,42 +110,12 @@ const Center = () => {
 
   return (
     <div className=" sm:ml-64 h-screen bg-[#121212] rounded-xl overflow-y-scroll scrollbar-hide">
-      <header className="absolute top-5 right-8 ">
-        <div
-          onClick={() => signOut()}
-          className=" cursor-pointer flex items-center bg-[#18d860] sm:bg-black space-x-1 sm:space-x-3 opacity-90 hover:opacity-80  rounded-full p-1 pr-2"
-        >
-          <Image
-            className="rounded-full sm:block w-5 h-5 sm:w-10 sm:h-10"
-            width={40}
-            height={40}
-            src={session?.user?.image}
-            alt="profile picture"
-          />
-          <h2 className="text-white hidden md:inline">
-            {session?.user?.username}
-          </h2>
-          <ChevronDownIcon className="w-5 h-5 text-white" />
-        </div>
-      </header>
-      <section className="fixed py-2 px-8 w-full sm:w-[45%] lg:w-3/5 ">
-        <form className="relative" onSubmit={handleSearchClick}>
-          <input
-            value={isSearching}
-            onChange={handleOnChangeInput}
-            type="search"
-            id="default-search"
-            className="block w-full p-1 sm:p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Songs, Albums, Artists..."
-          />
-          <button
-            type="submit"
-            className="text-white absolute right-2.5 sm:bottom-2.5 bottom-[5px] bg-[#18d860] opacity-90 hover:opacity-60 focus:ring-4 focus:outline-none focus:ring-[#18d860] font-medium rounded-full text-sm px-1 py-0 sm:px-4 sm:py-2 dark:bg-[#18d860] dark:hover:bg-[#18d860] dark:focus:ring-[#18d860]"
-          >
-            🔎
-          </button>
-        </form>
-      </section>
+      <HeaderUser session={session} />
+      <SearchBar
+        handleSearchClick={handleSearchClick}
+        isSearching={isSearching}
+        handleOnChangeInput={handleOnChangeInput}
+      />
       {isLoading ? (
         <Spinner />
       ) : !isSearching ? (
