@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useSpotify from "../hooks/useSpotify";
 import Image from "next/image";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
 import { isSearchingState } from "../atoms/searchAtom";
+import { set } from "lodash";
 const Song = ({ order, track }) => {
   const spotifyApi = useSpotify();
 
@@ -12,6 +13,7 @@ const Song = ({ order, track }) => {
     useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
   const isSearching = useRecoilValue(isSearchingState);
+  const [trackIsInYourMusic, setTrackIsInYourMusic] = React.useState(false);
   let songItem = track;
   if (!isSearching) {
     songItem = track.track;
@@ -27,6 +29,7 @@ const Song = ({ order, track }) => {
     spotifyApi
       .addToMySavedTracks([songItem.id])
       .then((res) => {
+        setTrackIsInYourMusic(true);
         console.log("Track saved!", res);
       })
       .catch((err) => {
@@ -34,8 +37,19 @@ const Song = ({ order, track }) => {
       });
   };
 
+  useEffect(() => {
+    spotifyApi.containsMySavedTracks([songItem.id]).then(
+      function (data) {
+        console.log(data.body[0] + " is in your Your Music");
+        setTrackIsInYourMusic(data.body[0]);
+        // trackIsInYourMusic = data.body[0];
+      },
+      function (err) {
+        console.log("Something went wrong!", err);
+      }
+    );
+  }, [spotifyApi]);
   if (isSearching) {
-    // console.log("isSearchinb component Song", songItem);
     return (
       <div
         onClick={playSong}
@@ -57,9 +71,17 @@ const Song = ({ order, track }) => {
 
         <div className="flex items-center justify-between ml-auto md:ml-0">
           <p className="hidden md:inline">{songItem.album.name}</p>
-          <a href={songItem.preview_url} target="_blank">
-            <HeartIcon className="text-green-400 w-5 h-5" />
-          </a>
+          <button
+            disabled={trackIsInYourMusic}
+            className="z-20 cursor-pointer button"
+            onClick={handleFavoriteSong}
+          >
+            {trackIsInYourMusic ? (
+              <HeartIcon className="text-green-400 w-5 h-5" />
+            ) : (
+              <HeartIcon className="text-white w-5 h-5" />
+            )}
+          </button>
         </div>
       </div>
     );
@@ -86,11 +108,15 @@ const Song = ({ order, track }) => {
         <div className="flex items-center justify-between ml-auto md:ml-0">
           <p className="hidden md:inline">{songItem.album.name}</p>
           <button
+            disabled={trackIsInYourMusic}
             className="z-20 cursor-pointer button"
             onClick={handleFavoriteSong}
-            target="_blank"
           >
-            <HeartIcon className="text-green-400 w-5 h-5" />
+            {trackIsInYourMusic ? (
+              <HeartIcon className="text-green-400 w-5 h-5" />
+            ) : (
+              <HeartIcon className="text-white w-5 h-5" />
+            )}
           </button>
         </div>
       </div>

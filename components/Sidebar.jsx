@@ -10,18 +10,33 @@ import {
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import useSpotify from "../hooks/useSpotify";
-import { playlistIdState } from "../atoms/playlistAtom";
+import { isFavoriteState, playlistIdState } from "../atoms/playlistAtom";
+import { isSearchingState } from "../atoms/searchAtom";
 
 const Sidebar = () => {
   const { data: session, status } = useSession();
   const spotifyApi = useSpotify();
+
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
+  const [isSearching, setIsSearching] = useRecoilState(isSearchingState);
+  const [isFavorite, setIsFavorite] = useRecoilState(isFavoriteState);
 
   const [playlist, setPlaylist] = useState([]);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
 
+  const handleCenter = (id) => {
+    setPlaylistId(id);
+    setIsSearching(null);
+  };
+
+  const handleFavorite = () => {
+    setIsFavorite(!isFavorite);
+    setIsSearching(null);
+  };
+
   useEffect(() => {
+    console.log("RENDER ASIDE LIST");
     if (spotifyApi.getAccessToken()) {
       spotifyApi.getUserPlaylists().then((res) => {
         setPlaylist(res.body.items);
@@ -76,32 +91,42 @@ const Sidebar = () => {
         <div
           className={`flex flex-col gap-4 bg-[#121212] px-3 py-2 rounded-xl `}
         >
-          <button className="flex items-center space-x-5  hover:text-white px-3 py-1">
+          <button
+            onClick={() => handleCenter("37i9dQZF1DWUVpAXiEPK8P")}
+            className="flex items-center space-x-5  hover:text-white px-3 py-1"
+          >
             <HomeIcon className="h-5 w-5  " />
             <p className="">Home</p>
+          </button>
+          <button
+            onClick={handleFavorite}
+            className="flex items-center space-x-5 hover:text-white px-3 py-1"
+          >
+            <HeartIcon className="h-5 w-5 " />
+            <p className="">Liked Songs</p>
           </button>
         </div>
 
         <div className="flex flex-col gap-4 bg-[#121212] px-3 py-2 rounded-xl">
-          <button className="flex items-center space-x-5  hover:text-white px-3 py-1">
+          {/* <button className="flex items-center space-x-5  hover:text-white px-3 py-1">
             <BookOpenIcon className="h-5 w-5 " />
             <p className="">Your library</p>
-          </button>
-          <button className="flex items-center space-x-5 hover:text-white px-3 py-1">
+          </button> */}
+          {/* <button className="flex items-center space-x-5 hover:text-white px-3 py-1">
             <HeartIcon className="h-5 w-5 " />
             <p className="">Liked Songs</p>
-          </button>
-          <button className="flex items-center space-x-5 hover:text-white px-3 py-1">
+          </button> */}
+          {/* <button className="flex items-center space-x-5 hover:text-white px-3 py-1">
             <PlusCircleIcon className="h-5 w-5 " />
             <p className="">Your Episodes</p>
-          </button>
+          </button> */}
 
           {/* Playlist */}
           <div className="space-y-2 px-3 py-1">
             {playlist.map((item) => (
               <p
                 key={item.id}
-                onClick={() => setPlaylistId(item.id)}
+                onClick={() => handleCenter(item.id)}
                 className="cursor-pointer hover:text-white"
               >
                 {item.name}

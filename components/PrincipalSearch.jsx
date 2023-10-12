@@ -1,12 +1,10 @@
 import React from "react";
-import useSpotify from "../hooks/useSpotify";
 import Image from "next/image";
-import { PlayCircleIcon } from "@heroicons/react/24/outline";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
+import useSpotify from "../hooks/useSpotify";
 import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
-import Song from "./Song";
 import RelevantSong from "./RelevantSong";
-import { searchTrackState } from "../atoms/searchAtom";
+import { HeartIcon } from "@heroicons/react/24/outline";
 
 const PrincipalSearch = ({ tracksSongs }) => {
   const spotifyApi = useSpotify();
@@ -15,7 +13,22 @@ const PrincipalSearch = ({ tracksSongs }) => {
     useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
 
-  console.log(tracksSongs, "tracks");
+  const handleFavoriteSong = (id) => {
+    spotifyApi
+      .addToMySavedTracks([id])
+      .then((res) => {
+        console.log("Track saved!", res);
+      })
+      .catch((err) => {
+        console.log("Something went wrong!", err);
+      });
+  };
+
+  const playSong = (id, uri) => {
+    setCurrentTrackId(id);
+    setIsPlaying(true);
+    spotifyApi.play({ uris: [uri] });
+  };
 
   return (
     <div
@@ -29,14 +42,10 @@ const PrincipalSearch = ({ tracksSongs }) => {
         className="flex w-full flex-col justify-center items-center "
       >
         {tracksSongs?.tracks?.items?.slice(0, 4).map((item, i) => {
-          const playSong = () => {
-            setCurrentTrackId(item.id);
-            setIsPlaying(true);
-            spotifyApi.play({ uris: [item.uri] });
-          };
           return (
             <div
-              onClick={playSong}
+              key={item.id}
+              onClick={() => playSong(item.id, item.uri)}
               className=" w-full justify-between py-1 px-5 text-gray-500 cursor-pointer hover:bg-gray-600 hover:text-white hidden md:flex"
             >
               <div className="flex items-center space-x-4">
@@ -53,9 +62,13 @@ const PrincipalSearch = ({ tracksSongs }) => {
               </div>
 
               <div className="flex items-center justify-between ml-auto md:ml-0 ">
-                <a href={item.preview_url} target="_blank">
-                  <PlayCircleIcon className="text-green-400 w-5 h-5" />
-                </a>
+                <button
+                  className="z-20 cursor-pointer button"
+                  onClick={() => handleFavoriteSong(item.id)}
+                  target="_blank"
+                >
+                  <HeartIcon className="text-green-400 w-5 h-5" />
+                </button>
               </div>
             </div>
           );

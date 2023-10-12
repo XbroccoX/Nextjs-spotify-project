@@ -18,11 +18,11 @@ const RelevantSong = ({ trackInfo }) => {
     setIsPlaying(true);
     spotifyApi.play({ uris: [trackInfo.uri] });
   };
-  console.log(trackInfo, "trackInfo");
 
   return (
     <div className="flex items-center justify-center md:justify-start md:space-x-4 ">
       <div
+        key={trackInfo.id}
         onClick={playSong}
         className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl md:w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
       >
