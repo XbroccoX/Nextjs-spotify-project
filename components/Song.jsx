@@ -14,6 +14,7 @@ const Song = ({ order, track }) => {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
   const isSearching = useRecoilValue(isSearchingState);
   const [trackIsInYourMusic, setTrackIsInYourMusic] = React.useState(false);
+
   let songItem = track;
   if (!isSearching) {
     songItem = track.track;

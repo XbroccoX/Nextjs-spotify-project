@@ -7,8 +7,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { set, shuffle } from "lodash";
 import debounce from "just-debounce-it";
 
-import { BackwardIcon, ForwardIcon } from "@heroicons/react/24/outline";
-
 import {
   isFavoriteState,
   playlistIdState,
@@ -21,6 +19,7 @@ import TracksSearch from "./TracksSearch";
 import AndesLogo from "../public/images/andeslogo.png";
 import HeaderUser from "./main/HeaderUser";
 import SearchBar from "./main/SearchBar";
+import Pagination from "./UI/Pagination";
 
 const color = [
   "from-indigo-500",
@@ -38,9 +37,11 @@ const Center = () => {
   const [isSearching, setIsSearching] = useRecoilState(isSearchingState);
   const [isFavorite, setIsFavorite] = useRecoilState(isFavoriteState);
   const playlistId = useRecoilValue(playlistIdState);
-  const [isLoading, setIsLoading] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [bgColor, setBgColor] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+
   const previousSearch = useRef(setIsSearching);
 
   const debounceOnChange = useCallback(
@@ -136,6 +137,13 @@ const Center = () => {
         console.log("Hay un error al momento de traer la playlist", err);
       });
   };
+  const handleNextPage = () => {
+    if (currentPage + 20 > playlist?.limit) return;
+    setCurrentPage(currentPage + 10);
+  };
+  const handlePrevPage = () => {
+    if (currentPage > 0) setCurrentPage(currentPage - 10);
+  };
 
   return (
     <div className=" sm:ml-64 h-screen bg-[#121212] rounded-xl overflow-y-scroll scrollbar-hide">
@@ -176,18 +184,14 @@ const Center = () => {
                 {playlist?.description ? playlist?.description : ""}
               </p>
             </div>
-            <div className="hidden justify-center items-center sm:flex sm:flex-row space-y-2 sm:space-x-3 sm:space-y-0">
-              <button className="bg-gray-700 text-white rounded-full px-2 py-1 md:px-4 md:py-2 font-bold  cursor-pointer">
-                <BackwardIcon className="w-5 h-5 text-white button" />
-              </button>
-              <span>1</span>
-              <button className="bg-gray-700 text-white rounded-full px-2 py-1 md:px-4 md:py-2 font-bold ">
-                <ForwardIcon className="w-5 h-5 text-white button" />
-              </button>
-            </div>
+            <Pagination
+              nextPage={handleNextPage}
+              prevPage={handlePrevPage}
+              currentPage={currentPage}
+            />
           </section>
           <section>
-            <Songs />
+            <Songs currentPage={currentPage} />
           </section>
         </>
       ) : (
