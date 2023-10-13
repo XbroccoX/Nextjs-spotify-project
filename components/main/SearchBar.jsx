@@ -1,7 +1,7 @@
-const SearchBar = ({ handleSearchClick, isSearching, handleOnChangeInput }) => {
+const SearchBar = ({ handleOnSubmit, isSearching, handleOnChangeInput }) => {
   return (
     <section className="fixed py-2 px-8 w-full sm:w-[45%] lg:w-3/5 ">
-      <form className="relative" onSubmit={handleSearchClick}>
+      <form className="relative" onSubmit={handleOnSubmit}>
         <input
           value={isSearching}
           onChange={handleOnChangeInput}

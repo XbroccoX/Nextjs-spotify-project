@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRecoilState } from "recoil";
 import useSpotify from "../hooks/useSpotify";
 import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
 import RelevantSong from "./RelevantSong";
 import { HeartIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as FilledHeartIcon } from "@heroicons/react/24/solid";
 
 const PrincipalSearch = ({ tracksSongs }) => {
   const spotifyApi = useSpotify();
@@ -13,6 +14,7 @@ const PrincipalSearch = ({ tracksSongs }) => {
     useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
 
+  // METHODS
   const handleFavoriteSong = (id) => {
     spotifyApi
       .addToMySavedTracks([id])
@@ -42,6 +44,19 @@ const PrincipalSearch = ({ tracksSongs }) => {
         className="flex w-full flex-col justify-center items-center "
       >
         {tracksSongs?.tracks?.items?.slice(0, 4).map((item, i) => {
+          const [trackIsInYourMusic, setTrackIsInYourMusic] =
+            React.useState(false);
+
+          useEffect(() => {
+            spotifyApi.containsMySavedTracks([item.id]).then(
+              function (data) {
+                setTrackIsInYourMusic(data.body[0]);
+              },
+              function (err) {
+                console.log("Something went wrong!", err);
+              }
+            );
+          }, [spotifyApi]);
           return (
             <div
               key={item.id}
@@ -63,11 +78,15 @@ const PrincipalSearch = ({ tracksSongs }) => {
 
               <div className="flex items-center justify-between ml-auto md:ml-0 ">
                 <button
+                  disabled={trackIsInYourMusic}
                   className="z-20 cursor-pointer button"
                   onClick={() => handleFavoriteSong(item.id)}
-                  target="_blank"
                 >
-                  <HeartIcon className="text-green-400 w-5 h-5" />
+                  {trackIsInYourMusic ? (
+                    <FilledHeartIcon className="text-green-400 w-5 h-5 " />
+                  ) : (
+                    <HeartIcon className="text-white w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>

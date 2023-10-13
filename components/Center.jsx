@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 
 import useSpotify from "../hooks/useSpotify";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { set, shuffle } from "lodash";
+import debounce from "just-debounce-it";
+
+import { BackwardIcon, ForwardIcon } from "@heroicons/react/24/outline";
 
 import {
   isFavoriteState,
@@ -38,6 +41,23 @@ const Center = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [bgColor, setBgColor] = useState(null);
+  const previousSearch = useRef(setIsSearching);
+
+  const debounceOnChange = useCallback(
+    debounce((search) => {
+      console.log("search", search);
+      spotifyApi
+        .searchTracks(search)
+        .then((res) => {
+          setIsLoading(false);
+          setSearchSongs(res.body);
+        })
+        .catch((err) => {
+          console.log("Hay un error al momento de traer la playlist", err);
+        });
+    }, 500),
+    []
+  );
 
   //TRAER PLAYLIST ESPECIFICA
   useEffect(() => {
@@ -80,23 +100,32 @@ const Center = () => {
 
   //  METHODS HANDLERS AND FUNCTIONS
   const handleOnChangeInput = (e) => {
-    // setSearchText(e.target.value);
-    if (e.target.value === "") {
+    const newQuery = e.target.value;
+    if (newQuery.startsWith(" ")) {
+      setIsSearching(null);
+      return;
+    }
+    if (newQuery === "") {
       setIsLoading(false);
       setIsSearching(null);
     } else {
       setIsLoading(true);
       setIsSearching(e.target.value);
+      debounceOnChange(e.target.value);
     }
   };
-  const handleSearchClick = (e) => {
+  const handleOnSubmit = (e) => {
     e.preventDefault();
+    if (previousSearch.current === isSearching) return;
+
     if (isSearching === "" || isSearching === null) {
       setIsSearching(null);
       return;
     }
+
     setIsLoading(true);
     setIsSearching(isSearching);
+    previousSearch.current = isSearching;
     spotifyApi
       .searchTracks(isSearching)
       .then((res) => {
@@ -112,7 +141,7 @@ const Center = () => {
     <div className=" sm:ml-64 h-screen bg-[#121212] rounded-xl overflow-y-scroll scrollbar-hide">
       <HeaderUser session={session} />
       <SearchBar
-        handleSearchClick={handleSearchClick}
+        handleOnSubmit={handleOnSubmit}
         isSearching={isSearching}
         handleOnChangeInput={handleOnChangeInput}
       />
@@ -147,9 +176,13 @@ const Center = () => {
                 {playlist?.description ? playlist?.description : ""}
               </p>
             </div>
-            <div className="flex flex-col lg:flex-row space-y-2 lg:space-x-3 lg:space-y-0">
-              <button className="bg-gray-700 text-white rounded-full px-2 py-1 md:px-4 md:py-2 font-bold cursor-default">
-                SIGUIENDO
+            <div className="hidden justify-center items-center sm:flex sm:flex-row space-y-2 sm:space-x-3 sm:space-y-0">
+              <button className="bg-gray-700 text-white rounded-full px-2 py-1 md:px-4 md:py-2 font-bold  cursor-pointer">
+                <BackwardIcon className="w-5 h-5 text-white button" />
+              </button>
+              <span>1</span>
+              <button className="bg-gray-700 text-white rounded-full px-2 py-1 md:px-4 md:py-2 font-bold ">
+                <ForwardIcon className="w-5 h-5 text-white button" />
               </button>
             </div>
           </section>
