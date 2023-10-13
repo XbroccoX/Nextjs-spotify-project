@@ -45,6 +45,7 @@ const Player = () => {
 
   //   METHODS HANDLERS AND FUNCTIONS
   const fetchCurrentSong = () => {
+    console.log(songInfo);
     if (!songInfo) {
       spotifyApi.getMyCurrentPlayingTrack().then((res) => {
         console.log("Now playing: ", res.body?.item);
@@ -79,50 +80,63 @@ const Player = () => {
 
   return (
     <div className="h-20 z-40 rounded-lg text-white grid grid-cols-3 text-xs md:text-base px-2 md:px-8">
-      {/* left */}
-      <div className="flex items-center space-x-4">
-        <Image
-          width={60}
-          height={60}
-          className="hidden md:inline  rounded-md"
-          src={songInfo?.album.images?.[0].url}
-          alt="track image"
-        />
-        <div className="flex flex-col">
-          <h3>{songInfo?.name}</h3>
-          <p>{songInfo?.artists?.[0]?.name}</p>
-        </div>
-      </div>
-      {/* Center */}
-      <div className="flex items-center justify-evenly">
-        {/* <ArrowsRightLeftIcon className="button" /> */}
-        {/* <BackwardIcon className="button" /> */}
-        {isPlaying ? (
-          <PauseCircleIcon
-            onClick={handlePlayPause}
-            className="button w-10 h-10"
-          />
-        ) : (
-          <PlayCircleIcon
-            onClick={handlePlayPause}
-            className="button w-10 h-10"
-          />
-        )}
-        {/* <ForwardIcon className="button" /> */}
-        {/* <ArrowPathRoundedSquareIcon className="button" /> */}
-      </div>
-      {/* Right */}
-      <div className="flex items-center justify-end space-x-2">
-        <SpeakerWaveIcon className="w-5 h-5" />
-        <input
-          type="range"
-          min={0}
-          max={100}
-          value={volume}
-          onChange={(e) => setVolume(Number(e.target.value))}
-          className="w-14 md:w-28   "
-        />
-      </div>
+      {!currentTrackId ? (
+        <>
+          <div></div>
+          <div className="flex items-center j">
+            <p className="col-span-3 text-center">
+              🎼 Reproduce una canción 🎼 🥵
+            </p>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* left */}
+          <div className="flex items-center space-x-4">
+            <Image
+              width={60}
+              height={60}
+              className="hidden md:inline  rounded-md"
+              src={songInfo?.album.images?.[0].url}
+              alt="track image"
+            />
+            <div className="flex flex-col">
+              <h3>{songInfo?.name}</h3>
+              <p>{songInfo?.artists?.[0]?.name}</p>
+            </div>
+          </div>
+          {/* Center */}
+          <div className="flex items-center justify-evenly">
+            {/* <ArrowsRightLeftIcon className="button" /> */}
+            {/* <BackwardIcon className="button" /> */}
+            {isPlaying ? (
+              <PauseCircleIcon
+                onClick={handlePlayPause}
+                className="button w-10 h-10"
+              />
+            ) : (
+              <PlayCircleIcon
+                onClick={handlePlayPause}
+                className="button w-10 h-10"
+              />
+            )}
+            {/* <ForwardIcon className="button" /> */}
+            {/* <ArrowPathRoundedSquareIcon className="button" /> */}
+          </div>
+          {/* Right */}
+          <div className="flex items-center justify-end space-x-2">
+            <SpeakerWaveIcon className="w-5 h-5" />
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={volume}
+              onChange={(e) => setVolume(Number(e.target.value))}
+              className="w-14 md:w-28   "
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

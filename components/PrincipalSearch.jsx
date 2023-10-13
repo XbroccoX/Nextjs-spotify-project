@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRecoilState } from "recoil";
 import useSpotify from "../hooks/useSpotify";
@@ -13,17 +13,25 @@ const PrincipalSearch = ({ tracksSongs }) => {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
+  const [tracksInFavorites, setTracksInFavorites] = useState({});
 
-  // METHODS
-  const handleFavoriteSong = (id) => {
-    spotifyApi
-      .addToMySavedTracks([id])
-      .then((res) => {
-        console.log("Track saved!", res);
-      })
-      .catch((err) => {
-        console.log("Something went wrong!", err);
+  useEffect(() => {
+    if (tracksSongs?.tracks?.items) {
+      const trackIds = tracksSongs.tracks.items.map((item) => item.id);
+      spotifyApi.containsMySavedTracks(trackIds).then((data) => {
+        const favorites = {};
+        trackIds.forEach((id, index) => {
+          favorites[id] = data.body[index];
+        });
+        setTracksInFavorites(favorites);
       });
+    }
+  }, [tracksSongs, spotifyApi]);
+
+  const handleFavoriteSong = (id) => {
+    spotifyApi.addToMySavedTracks([id]).then(() => {
+      setTracksInFavorites((prev) => ({ ...prev, [id]: true }));
+    });
   };
 
   const playSong = (id, uri) => {
@@ -44,19 +52,7 @@ const PrincipalSearch = ({ tracksSongs }) => {
         className="flex w-full flex-col justify-center items-center "
       >
         {tracksSongs?.tracks?.items?.slice(0, 4).map((item, i) => {
-          const [trackIsInYourMusic, setTrackIsInYourMusic] =
-            React.useState(false);
-
-          useEffect(() => {
-            spotifyApi.containsMySavedTracks([item.id]).then(
-              function (data) {
-                setTrackIsInYourMusic(data.body[0]);
-              },
-              function (err) {
-                console.log("Something went wrong!", err);
-              }
-            );
-          }, [spotifyApi]);
+          const trackIsInYourMusic = tracksInFavorites[item.id] || false;
           return (
             <div
               key={item.id}
