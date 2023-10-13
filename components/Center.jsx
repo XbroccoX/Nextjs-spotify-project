@@ -78,7 +78,7 @@ const Center = () => {
 
   // TRAER FAVORITOS
   useEffect(() => {
-    console.log("se ejecuta");
+    // console.log("se ejecuta");
     spotifyApi
       .getMySavedTracks({
         limit: 20,

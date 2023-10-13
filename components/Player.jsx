@@ -45,10 +45,10 @@ const Player = () => {
 
   //   METHODS HANDLERS AND FUNCTIONS
   const fetchCurrentSong = () => {
-    console.log(songInfo);
+    // console.log(songInfo);
     if (!songInfo) {
       spotifyApi.getMyCurrentPlayingTrack().then((res) => {
-        console.log("Now playing: ", res.body?.item);
+        // console.log("Now playing: ", res.body?.item);
         setCurrentTrackId(res.body?.item?.id);
       });
 
